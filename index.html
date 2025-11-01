@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интернет-магазин isvinzov.ru</title>
+    <script type="text/javascript" src="/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=q-1JOUcFjVEizG6ga1yPpuHe9e93WLbiiB8lU-U9s8huZZOYJUZ00xzgOmvsnpgt" charset="UTF-8"></script>
+    <link rel="stylesheet" crossorigin="anonymous" href="/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9pc3Zpbnpvdi5ydS9zaG9wLw"/>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: url('https://avatars.mds.yandex.net/i?id=a7a8f2831a10efe49137cb79eb9ba1ed_l-13083210-images-thumbs&n=13') center/cover;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .product {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            transition: transform 0.3s;
+        }
+        .product:hover {
+            transform: translateY(-5px);
+        }
+        .product-image {
+            width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+            margin: 0 auto 20px;
+            border-radius: 5px;
+            display: block;
+        }
+        .product-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .product-description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff5722;
+            margin: 15px 0;
+        }
+        .order-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .order-btn:hover {
+            background-color: #2980b9;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .form-title {
+            margin-top: 0;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #219653;
+        }
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+        }
+        h1 {
+            color: black;
+            font-size: 50px; 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            margin: 0;
+        }
+        #selectedProduct {
+            text-align: center; 
+            font-weight: bold; 
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        .payment-methods {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+        .payment-methods label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .payment-option-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Стили для попапа инструкции */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .popup-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .popup-body {
+            padding: 20px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .popup-body ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .popup-body li {
+            margin-bottom: 8px;
+        }
+
+        .popup-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            text-align: right;
+            background: #f8f9fa;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .popup-close-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .popup-close-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Магазин инфотоваров</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="products-grid">
+            <!-- Первый товар -->
+            <div class="product" id="product1">
+                <img src="https://isvinzov.ru/shop1/img/img1.png" alt="Инфотовар 1" class="product-image">
+                <h2 class="product-title">Третья часть кода</h2>
+                <div class="product-price">100 ₽</div>
+                <p class="product-description">
+                    С помощью этого кода для сайтов тильда вы сможете создать свою активную корзину в меню сайта справа. В ней также будет количество товара и рядом цена товара.
+                </p>
+                <button class="order-btn" onclick="openOrderModal('product1')">Оформить заказ</button>
+            </div>
+            
+            <!-- Второй товар -->
+            <div class="product" id="product2">
+                <img src="https://isvinzov.ru/shop1/img/img2.jpg" alt="Инфотовар 2" class="product-image">
+                <h2 class="product-title">Код затеняющий товары по времени</h2>
+                <div class="product-price">100 ₽</div>
+                <p class="product-description">
+                    С помощью этого кода для сайтов тильда вы сможете автоматически отключать товары, то есть делать их не активными в нужное время суток.
+                </p>
+                <button class="order-btn" onclick="openOrderModal('product2')">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно выбора способа оплаты -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('paymentModal')">&times;</span>
+            <h2 class="form-title">Оформление заказа</h2>
+            <p id="selectedProductName" style="text-align: center; font-weight: bold; margin-bottom: 20px;"></p>
+            
+            <div id="paymentOptions">
+                <button class="payment-option-btn" onclick="showInstructionPopup()">
+                    Инструкция для получения товара
+                </button>
+                <button class="payment-option-btn" onclick="showPaymentForm('yandex')">
+                    Оплатить через Яндекс.Деньги
+                </button>
+                <button class="payment-option-btn" onclick="showPaymentForm('request')" style="margin-top: 10px;">
+                    Получить товар на почту
+                </button>
+            </div>
+            
+            <!-- Форма оплаты через Яндекс.Деньги -->
+            <div id="yandexPaymentForm" style="display: none;">
+                <form method="POST" action="https://yoomoney.ru/quickpay/confirm.xml">
+                    <input type="hidden" name="receiver" value="41001469135646">
+                    <input type="hidden" name="formcomment" value="Оплата инфопродукта">
+                    <input type="hidden" name="short-dest" value="Оплата инфопродукта">
+                    <input type="hidden" name="label" id="yandexLabel" value="">
+                    <input type="hidden" name="quickpay-form" value="shop">
+                    <input type="hidden" name="targets" value="Оплата инфопродукта">
+                    <input type="hidden" name="sum" id="yandexSum" value="100" data-type="number">
+                    <input type="hidden" name="need-fio" value="false">
+                    <input type="hidden" name="need-email" value="true">
+                    <input type="hidden" name="need-phone" value="false">
+                    <input type="hidden" name="need-address" value="false">
+                    
+                    <div class="payment-methods">
+                        <label><input type="radio" name="paymentType" value="PC" checked> Яндекс.Деньги</label>
+                        <label><input type="radio" name="paymentType" value="AC"> Банковская карта</label>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Перейти к оплате</button>
+                </form>
+                <button class="back-btn" onclick="backToOptions()">← Назад к выбору</button>
+            </div>
+            
+            <!-- Форма заявки продавцу -->
+            <div id="sellerRequestForm" style="display: none;">
+              <form id="requestForm" action="sendmail.php" method="POST">
+                    <div class="form-group">
+                        <label for="requestName">Ваше имя:</label>
+                        <input type="text" id="requestName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="requestEmail">Email:</label>
+                        <input type="email" id="requestEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="requestMessage">Дополнительная информация:</label>
+                        <textarea id="requestMessage" name="message" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Отправить заявку</button>
+                </form>
+                <button class="back-btn" onclick="backToOptions()">← Назад к выбору</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно формы Mailopost -->
+    <div class="modal" id="mailopostFormModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('mailopostFormModal')">&times;</span>
+            <h2 class="form-title">Получить товар на почту</h2>
+            
+            <form action='https://forms.msndr.net/subscriptions/98a878c7d9e5a2501c7cc92af90c47e0/form' charset='UTF-8' method='post'>
+                <div style='position: absolute; width: 1px; height: 1px; margin: -1px; border: 0; padding: 0; white-space: nowrap; clip-path: inset(100%); clip: rect(0 0 0 0); overflow: hidden;'>
+                    <input type="text" name="recipient[name]" placeholder="Name" autocomplete="password" />
+                </div>
+                
+                <div class="form-group">
+                    <label class="required" for="email">Email</label>
+                    <input type="email" name="recipient[email]" id="recipient_email" value="" required="required" class="form-control" />
+                </div>
+                
+                <button type='submit' class="submit-btn">Получить товар</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Попап инструкции -->
+    <div id="instructionPopup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>Инструкция для получения товара</h3>
+                <span class="close-btn" onclick="closeInstructionPopup()">&times;</span>
+            </div>
+            <div class="popup-body">
+                <p>Пройдите несколько шагов и получите товар на вашу почту:</p>
+                <ul>
+                    <li>✅ Шаг 1: Оплачиваете товар через кошелёк Ю.Мани или карту
+                    (также можно просто пополнить баланс<br> тел.+7 996 982 10-51)  </li>
+                    <li>✅ Шаг 2:Кликаете на кнопку Получить товар на почту </li>
+                    <li>✅Шаг 3: Вводите в форму свою почту</li>
+                    <li>✅Шаг 4: Кликаете Получить товар</li>
+                    <li>✅Шаг 5: Переходите на свою почту</li>
+                    <li>✅Шаг 6: Подтверждаете почту</li>
+                    <li>✅Шаг 7: Забираете на своей почте товар</li>
+                </ul>
+                <p>Если что-то пошло не так, пишите мне на почту svim09@yandex.ru, я всегда на связи!.</p>
+            </div>
+            <div class="popup-footer">
+                <button class="popup-close-btn" onclick="closeInstructionPopup()">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 Магазин инфотоваров isvinzov.ru. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Текущий выбранный товар
+        let currentProduct = null;
+        let currentProductPrice = 0;
+        
+        // Открытие модального окна
+        function openOrderModal(productId) {
+            currentProduct = productId;
+            const productElement = document.getElementById(productId);
+            const productTitle = productElement.querySelector('.product-title').textContent;
+            currentProductPrice = parseInt(productElement.querySelector('.product-price').textContent);
+            
+            document.getElementById('selectedProductName').textContent = productTitle;
+            document.getElementById('yandexSum').value = currentProductPrice;
+            document.getElementById('yandexLabel').value = `${productId}_${Date.now()}`;
+            
+            // Показываем модальное окно
+            document.getElementById('paymentModal').style.display = 'flex';
+            document.getElementById('paymentOptions').style.display = 'block';
+            document.getElementById('yandexPaymentForm').style.display = 'none';
+            document.getElementById('sellerRequestForm').style.display = 'none';
+        }
+        
+        // Закрытие модального окна
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Функция для показа формы Mailopost
+        function showMailopostForm() {
+            // Закрываем текущее модальное окно
+            closeModal('paymentModal');
+            
+            // Показываем модальное окно с формой Mailopost
+            setTimeout(function() {
+                document.getElementById('mailopostFormModal').style.display = 'flex';
+            }, 300);
+        }
+
+        // Показать форму оплаты
+        function showPaymentForm(type) {
+            if (type === 'request') {
+                showMailopostForm();
+            } else {
+                document.getElementById('paymentOptions').style.display = 'none';
+                
+                if (type === 'yandex') {
+                    document.getElementById('yandexPaymentForm').style.display = 'block';
+                }
+            }
+        }
+        
+        // Вернуться к выбору способа оплаты
+        function backToOptions() {
+            document.getElementById('paymentOptions').style.display = 'block';
+            document.getElementById('yandexPaymentForm').style.display = 'none';
+            document.getElementById('sellerRequestForm').style.display = 'none';
+        }
+        
+        // Функция для показа попапа с инструкцией
+        function showInstructionPopup() {
+            const popup = document.getElementById('instructionPopup');
+            popup.style.display = 'flex';
+        }
+
+        // Функция для закрытия попапа
+        function closeInstructionPopup() {
+            const popup = document.getElementById('instructionPopup');
+            popup.style.display = 'none';
+        }
+        
+        // Обработка формы заявки продавцу
+        document.getElementById('requestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const modalContent = document.querySelector('#paymentModal .modal-content');
+            
+            // Показываем индикатор загрузки
+            modalContent.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <div class="loader" style="border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 2s linear infinite; margin: 0 auto 20px;"></div>
+                    <p style="font-size: 18px;">Отправка заявки...</p>
+                </div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            `;
+            
+            // Для примера просто покажем сообщение об успехе
+            setTimeout(function() {
+                modalContent.innerHTML = `
+                    <h2 class="form-title">Спасибо!</h2>
+                    <div style="text-align: center; padding: 20px;">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="#27ae60" style="margin-bottom: 15px;">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <p style="font-size: 18px;">Ваша заявка успешно отправлена!</p>
+                        <p>Я свяжусь с вами в ближайшее время.</p>
+                        <button onclick="closeModal('paymentModal')" style="margin-top: 20px; padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">OK</button>
+                    </div>
+                `;
+            }, 1500);
+        });
+        
+        // Закрытие при клике вне модального окна
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal('paymentModal');
+                closeModal('mailopostFormModal');
+            }
+            if (event.target.id === 'instructionPopup') {
+                closeInstructionPopup();
+            }
+        });
+    </script>
+</body>
+</html>
